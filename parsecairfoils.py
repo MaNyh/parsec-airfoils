@@ -59,26 +59,29 @@ cf_suc = pc.pcoef(xte,yte,rle,
                   x_suc,y_suc,d2ydx2_suc,th_suc,
                   'suc')
 
+# Generate node-spacing along x using cosine
+beta = np.linspace(0.0, pi, res)
+half_cosine_spacing = [(0.5 * (1.0 - np.cos(x))) for x in beta]
 
 # Evaluate pressure (lower) surface points
-xx_pre = np.linspace(xte,xle,101)
-yy_pre = (cf_pre[0]*xx_pre**(1/2) + 
-          cf_pre[1]*xx_pre**(3/2) + 
-          cf_pre[2]*xx_pre**(5/2) + 
-          cf_pre[3]*xx_pre**(7/2) + 
-          cf_pre[4]*xx_pre**(9/2) + 
-          cf_pre[5]*xx_pre**(11/2)
-         ) 
+xx_pre = np.array(half_cosine_spacing[::-1])
+yy_pre = (cf_pre[0] * xx_pre ** (1 / 2) +
+          cf_pre[1] * xx_pre ** (3 / 2) +
+          cf_pre[2] * xx_pre ** (5 / 2) +
+          cf_pre[3] * xx_pre ** (7 / 2) +
+          cf_pre[4] * xx_pre ** (9 / 2) +
+          cf_pre[5] * xx_pre ** (11 / 2)
+          )
 
 # Evaluate suction (upper) surface points
-xx_suc = np.linspace(xle,xte,101)
-yy_suc = (cf_suc[0]*xx_suc**(1/2) + 
-          cf_suc[1]*xx_suc**(3/2) + 
-          cf_suc[2]*xx_suc**(5/2) + 
-          cf_suc[3]*xx_suc**(7/2) + 
-          cf_suc[4]*xx_suc**(9/2) + 
-          cf_suc[5]*xx_suc**(11/2)
-         )
+xx_suc = np.array(half_cosine_spacing)
+yy_suc = (cf_suc[0] * xx_suc ** (1 / 2) +
+          cf_suc[1] * xx_suc ** (3 / 2) +
+          cf_suc[2] * xx_suc ** (5 / 2) +
+          cf_suc[3] * xx_suc ** (7 / 2) +
+          cf_suc[4] * xx_suc ** (9 / 2) +
+          cf_suc[5] * xx_suc ** (11 / 2)
+          )
 
 # Use parsecexport to save coordinate file
 fpath = os.path.join(path, 'parsec_airfoil.dat')
